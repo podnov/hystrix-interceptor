@@ -38,7 +38,7 @@ public class OrganizationsDAO {
     }
 
     @HystrixIntercept(commandGroupKeyFactory = HystrixInterceptorClassNameCommandGroupKeyFactory.class, commandKeyFactory = HystrixInterceptorMethodNameCommandKeyFactory.class)
-    public Organization truncateOrganizations() {
+    public void truncateOrganizations() {
         ...
     }
 }
