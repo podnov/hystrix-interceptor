@@ -5,7 +5,7 @@
 Automatically intercept and wrap method invocations in a [Hystrix](https://github.com/Netflix/Hystrix) command using [Java EE interceptors](http://docs.oracle.com/javaee/6/tutorial/doc/gkeed.html).
 
 ```
-@HystrixIntercept(groupKey = "PeopleGroup")
+@HystrixIntercept(commandGroupKey = "PeopleGroup")
 @Stateless
 public class PersonDAO {
 
@@ -22,20 +22,24 @@ public class PersonDAO {
 @Stateless
 public class OrganizationsDAO {
 
-    @HystrixIntercept(groupKey = "OrganizationsGroup")
+    @HystrixIntercept(commandGroupKey = "OrganizationsGroup")
     public List<Organization> getAllOrganizations() {
         ...
     }
     
-    @HystrixIntercept(groupKey = "OrganizationsWithPeopleGroup")
+    @HystrixIntercept(commandGroupKey = "OrganizationsWithPeopleGroup")
     public Organization getOrganizationByNameWithPeople(String name) {
         ...
     }
     
-    @HystrixIntercept(groupKey = "OrganizationsGroup", commandKey = "getOrganizationByName")
+    @HystrixIntercept(commandGroupKeyFactory = "OrganizationsGroup", commandKey = "getOrganizationByName")
     public Organization terribleMethodName(String name) {
         ...
     }
 
+    @HystrixIntercept(commandGroupKeyFactory = HystrixInterceptorClassNameCommandGroupKeyFactory.class, commandKeyFactory = HystrixInterceptorMethodNameCommandKeyFactory.class)
+    public Organization truncateOrganizations() {
+        ...
+    }
 }
 ```
