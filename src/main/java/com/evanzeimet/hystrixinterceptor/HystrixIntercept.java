@@ -10,6 +10,11 @@ import java.lang.annotation.Target;
 import javax.enterprise.util.Nonbinding;
 import javax.interceptor.InterceptorBinding;
 
+import com.evanzeimet.hystrixinterceptor.command.HystrixInterceptorCommandKeyFactory;
+import com.evanzeimet.hystrixinterceptor.command.HystrixInterceptorMethodNameCommandKeyFactory;
+import com.evanzeimet.hystrixinterceptor.command.group.HystrixInterceptorClassNameCommandGroupKeyFactory;
+import com.evanzeimet.hystrixinterceptor.command.group.HystrixInterceptorCommandGroupKeyFactory;
+
 @InterceptorBinding
 @Target({ TYPE, METHOD })
 @Retention(RUNTIME)
@@ -19,6 +24,12 @@ public @interface HystrixIntercept {
 	String commandKey() default "";
 
 	@Nonbinding
-	String groupKey();
+	String commandGroupKey() default "";
+
+	@Nonbinding
+	Class<? extends HystrixInterceptorCommandKeyFactory> commandKeyFactory() default HystrixInterceptorMethodNameCommandKeyFactory.class;
+
+	@Nonbinding
+	Class<? extends HystrixInterceptorCommandGroupKeyFactory> commandGroupKeyFactory() default HystrixInterceptorClassNameCommandGroupKeyFactory.class;
 
 }

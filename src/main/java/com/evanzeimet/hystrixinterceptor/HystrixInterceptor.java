@@ -5,7 +5,7 @@ import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 
 @Interceptor
-@HystrixIntercept(groupKey = "")
+@HystrixIntercept
 public class HystrixInterceptor {
 
 	@AroundInvoke
