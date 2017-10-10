@@ -12,8 +12,7 @@ public class HystrixInterceptorClassNameCommandGroupKeyFactory
 
 	@Override
 	public HystrixCommandGroupKey create(InvocationContext invocationContext) {
-		String className = invocationContext.getMethod().getDeclaringClass().getSimpleName();
-		return utils.createCommandGroupKey(className);
+		return utils.createDefaultCommandGroupKey(invocationContext);
 	}
 
 }
