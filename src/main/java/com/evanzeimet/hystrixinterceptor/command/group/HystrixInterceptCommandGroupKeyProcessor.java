@@ -1,7 +1,5 @@
 package com.evanzeimet.hystrixinterceptor.command.group;
 
-import java.lang.reflect.Method;
-
 import javax.interceptor.InvocationContext;
 
 import com.evanzeimet.hystrixinterceptor.HystrixIntercept;
@@ -15,25 +13,19 @@ public class HystrixInterceptCommandGroupKeyProcessor {
 	protected HystrixCommandGroupKey invokeFactory(HystrixIntercept annotation,
 			InvocationContext invocationContext) {
 		Class<? extends HystrixInterceptorCommandGroupKeyFactory> factoryClass = annotation.commandGroupKeyFactory();
-		HystrixInterceptorCommandGroupKeyFactory factory;
-
-		try {
-			factory = factoryClass.newInstance();
-		} catch (InstantiationException | IllegalAccessException e) {
-			String message = String.format("Could not invoke newInstance on [%s]", annotation);
-			throw new RuntimeException(message, e);
-		}
+		HystrixInterceptorCommandGroupKeyFactory factory = utils.createDefaultInstance(factoryClass);
 
 		return factory.create(invocationContext);
 	}
 
 	public HystrixCommandGroupKey process(InvocationContext invocationContext) {
-		HystrixCommandGroupKey result = null;
-		Method method = invocationContext.getMethod();
-		HystrixIntercept annotation = utils.getHystrixInterceptAnnotation(method);
+		HystrixCommandGroupKey result;
+
+		HystrixIntercept annotation = utils.getHystrixInterceptAnnotation(invocationContext);
 
 		String rawCommandGroupKey = annotation.commandGroupKey();
 		boolean staticKeyIsSet = utils.isNotBlank(rawCommandGroupKey);
+
 
 		if (staticKeyIsSet) {
 			result = utils.createCommandGroupKey(rawCommandGroupKey);

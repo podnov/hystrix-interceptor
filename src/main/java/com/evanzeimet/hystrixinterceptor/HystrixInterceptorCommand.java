@@ -3,15 +3,18 @@ package com.evanzeimet.hystrixinterceptor;
 import javax.interceptor.InvocationContext;
 
 import com.evanzeimet.hystrixinterceptor.command.HystrixInterceptCommandKeyProcessor;
+import com.evanzeimet.hystrixinterceptor.command.fallback.HystrixInterceptorCommandFallbackProcessor;
 import com.evanzeimet.hystrixinterceptor.command.group.HystrixInterceptCommandGroupKeyProcessor;
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.netflix.hystrix.HystrixCommandKey;
 
-public class HystrixInterceptorCommand extends HystrixCommand<Object> {
+public class HystrixInterceptorCommand
+		extends HystrixCommand<Object> {
 
 	private static final HystrixInterceptCommandKeyProcessor commandKeyProcessor = new HystrixInterceptCommandKeyProcessor();
 	private static final HystrixInterceptCommandGroupKeyProcessor commandGroupKeyProcessor = new HystrixInterceptCommandGroupKeyProcessor();
+	private static final HystrixInterceptorCommandFallbackProcessor fallbackProcesor = new HystrixInterceptorCommandFallbackProcessor();
 
 	private final InvocationContext invocationContext;
 
@@ -33,4 +36,8 @@ public class HystrixInterceptorCommand extends HystrixCommand<Object> {
 		return invocationContext.proceed();
 	}
 
+	@Override
+	protected Object getFallback() {
+		return fallbackProcesor.process(invocationContext);
+	}
 }

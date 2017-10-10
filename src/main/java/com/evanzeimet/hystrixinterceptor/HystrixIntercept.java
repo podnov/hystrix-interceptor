@@ -12,6 +12,8 @@ import javax.interceptor.InterceptorBinding;
 
 import com.evanzeimet.hystrixinterceptor.command.HystrixInterceptorCommandKeyFactory;
 import com.evanzeimet.hystrixinterceptor.command.HystrixInterceptorMethodNameCommandKeyFactory;
+import com.evanzeimet.hystrixinterceptor.command.fallback.HystrixInterceptorCommandFallbackHandler;
+import com.evanzeimet.hystrixinterceptor.command.fallback.UndefinedHystrixInterceptorCommandFallbackHandler;
 import com.evanzeimet.hystrixinterceptor.command.group.HystrixInterceptorClassNameCommandGroupKeyFactory;
 import com.evanzeimet.hystrixinterceptor.command.group.HystrixInterceptorCommandGroupKeyFactory;
 
@@ -31,5 +33,8 @@ public @interface HystrixIntercept {
 
 	@Nonbinding
 	Class<? extends HystrixInterceptorCommandGroupKeyFactory> commandGroupKeyFactory() default HystrixInterceptorClassNameCommandGroupKeyFactory.class;
+
+	@Nonbinding
+	Class<? extends HystrixInterceptorCommandFallbackHandler> fallbackHandler() default UndefinedHystrixInterceptorCommandFallbackHandler.class;
 
 }
